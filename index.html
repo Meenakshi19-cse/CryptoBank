@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decentralized Bank Management System</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #0f0f1e;
+        color: #fff;
+        overflow-x: hidden;
+      }
+
+      /* Navbar */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(15, 15, 30, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 20px 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 30px;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #667eea;
+      }
+
+      .connect-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: transform 0.2s;
+      }
+
+      .connect-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 100px 20px 50px;
+        background: radial-gradient(ellipse at top, #1a1a2e, #0f0f1e);
+      }
+
+      .hero h1 {
+        font-size: 56px;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero p {
+        font-size: 20px;
+        color: #a0a0b0;
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 16px 40px;
+        border-radius: 12px;
+        border: none;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 80%;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      }
+
+      /* Sections */
+      section {
+        padding: 80px 50px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      section h2 {
+        font-size: 36px;
+        margin-bottom: 40px;
+        text-align: center;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      /* Card Styles */
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        backdrop-filter: blur(10px);
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #a0a0b0;
+        font-size: 14px;
+      }
+
+      input[type="number"],
+      input[type="text"] {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      button {
+        padding: 14px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .balance-display {
+        background: rgba(102, 126, 234, 0.1);
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-top: 20px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+      }
+
+      .balance-display h3 {
+        font-size: 24px;
+        color: #667eea;
+      }
+
+      /* CRUD Table */
+      .crud-container {
+        margin-top: 30px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      th {
+        background: rgba(102, 126, 234, 0.2);
+        color: #667eea;
+        font-weight: 600;
+      }
+
+      tr:hover {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .action-buttons button {
+        width: auto;
+        padding: 8px 16px;
+        font-size: 14px;
+        margin: 0;
+      }
+
+      .edit-btn {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .delete-btn {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          padding: 20px;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .nav-links {
+          gap: 15px;
+        }
+
+        .hero h1 {
+          font-size: 36px;
+        }
+
+        section {
+          padding: 50px 20px;
+        }
+
+        table {
+          font-size: 14px;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">CryptoBank</div>
+      <ul class="nav-links">
+        <li><a href="#home" onclick="showSection('home')">Home</a></li>
+        <li><a href="#deposit" onclick="showSection('deposit')">Deposit</a></li>
+        <li>
+          <a href="#withdraw" onclick="showSection('withdraw')">Withdraw</a>
+        </li>
+        <li>
+          <a href="#balance" onclick="showSection('balance')">Check Balance</a>
+        </li>
+        <li><a href="#records" onclick="showSection('records')">Records</a></li>
+      </ul>
+      <button class="connect-btn" id="connectWallet">Connect Wallet</button>
+    </nav>
+
+    <section id="home" class="hero">
+      <div>
+        <h1>Welcome to CryptoBank</h1>
+        <p>
+          Your decentralized banking system on the blockchain. Secure,
+          transparent, and fully in your control. Manage your ETH deposits and
+          withdrawals with smart contract technology.
+        </p>
+        <button class="cta-button" onclick="showSection('deposit')">
+          Get Started
+        </button>
+      </div>
+    </section>
+
+    <section id="deposit" class="hidden">
+      <h2>Deposit Funds</h2>
+      <div class="card">
+        <div class="input-group">
+          <label for="depositAmount">Amount (ETH)</label>
+          <input
+            type="number"
+            id="depositAmount"
+            placeholder="0.0"
+            step="0.01"
+          />
+        </div>
+        <button onclick="deposit()">Deposit ETH</button>
+      </div>
+    </section>
+
+    <section id="withdraw" class="hidden">
+      <h2>Withdraw Funds</h2>
+      <div class="card">
+        <div class="input-group">
+          <label for="withdrawAmount">Amount (ETH)</label>
+          <input
+            type="number"
+            id="withdrawAmount"
+            placeholder="0.0"
+            step="0.01"
+          />
+        </div>
+        <button onclick="withdraw()">Withdraw ETH</button>
+      </div>
+    </section>
+
+    <section id="balance" class="hidden">
+      <h2>Check Balance</h2>
+      <div class="card">
+        <button onclick="checkBalance()">Refresh Balance</button>
+        <div class="balance-display">
+          <h3 id="balanceAmount">0.00 ETH</h3>
+        </div>
+      </div>
+    </section>
+
+    <section id="records" class="hidden">
+      <h2>Transaction Records</h2>
+      <div class="card">
+        <h3>Add New Record</h3>
+        <div class="input-group">
+          <label for="recordName">Name</label>
+          <input type="text" id="recordName" placeholder="Enter name" />
+        </div>
+        <div class="input-group">
+          <label for="recordAmount">Amount (ETH)</label>
+          <input
+            type="number"
+            id="recordAmount"
+            placeholder="0.0"
+            step="0.01"
+          />
+        </div>
+        <div class="input-group">
+          <label for="recordType">Type</label>
+          <input type="text" id="recordType" placeholder="Deposit/Withdraw" />
+        </div>
+        <button onclick="addRecord()">Add Record</button>
+      </div>
+
+      <div class="crud-container">
+        <h3>All Records</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recordsTable">
+            <tr>
+              <td colspan="5" style="text-align: center; color: #a0a0b0">
+                No records yet
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.5/web3.min.js"></script>
+    <script>
+      let web3;
+      let contract;
+      let userAccount;
+      let records = [];
+      let nextId = 1;
+
+      const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      const CONTRACT_ABI = [
+        {
+          inputs: [],
+          name: "deposit",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            { internalType: "uint256", name: "amount", type: "uint256" },
+          ],
+          name: "withdraw",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getBalance",
+          outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+          stateMutability: "view",
+          type: "function",
+        },
+      ];
+
+      // Initialize Web3
+      async function initWeb3() {
+        if (typeof window.ethereum !== "undefined") {
+          web3 = new Web3(window.ethereum);
+          contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+          return true;
+        } else {
+          alert("Please install MetaMask to use this DApp!");
+          return false;
+        }
+      }
+
+      // Connect Wallet
+      document
+        .getElementById("connectWallet")
+        .addEventListener("click", async () => {
+          if (await initWeb3()) {
+            try {
+              const accounts = await window.ethereum.request({
+                method: "eth_requestAccounts",
+              });
+              userAccount = accounts[0];
+              document.getElementById("connectWallet").textContent =
+                userAccount.substring(0, 6) + "..." + userAccount.substring(38);
+              alert("Wallet connected successfully!");
+            } catch (error) {
+              console.error("User denied account access", error);
+            }
+          }
+        });
+
+      // Navigation
+      function showSection(sectionId) {
+        const sections = ["home", "deposit", "withdraw", "balance", "records"];
+        sections.forEach((id) => {
+          document.getElementById(id).classList.add("hidden");
+        });
+        document.getElementById(sectionId).classList.remove("hidden");
+      }
+
+      // Deposit
+      async function deposit() {
+        const amount = document.getElementById("depositAmount").value;
+        if (!amount || amount <= 0) {
+          alert("Please enter a valid amount");
+          return;
+        }
+
+        try {
+          const accounts = await web3.eth.getAccounts();
+          await contract.methods.deposit().send({
+            from: accounts[0],
+            value: web3.utils.toWei(amount, "ether"),
+          });
+          alert("Deposit successful!");
+          document.getElementById("depositAmount").value = "";
+        } catch (error) {
+          console.error(error);
+          alert("Deposit failed: " + error.message);
+        }
+      }
+
+      // Withdraw
+      async function withdraw() {
+        const amount = document.getElementById("withdrawAmount").value;
+        if (!amount || amount <= 0) {
+          alert("Please enter a valid amount");
+          return;
+        }
+
+        try {
+          const accounts = await web3.eth.getAccounts();
+          await contract.methods
+            .withdraw(web3.utils.toWei(amount, "ether"))
+            .send({ from: accounts[0] });
+          alert("Withdrawal successful!");
+          document.getElementById("withdrawAmount").value = "";
+        } catch (error) {
+          console.error(error);
+          alert("Withdrawal failed: " + error.message);
+        }
+      }
+
+      // Check Balance
+      async function checkBalance() {
+        try {
+          const accounts = await web3.eth.getAccounts();
+          const balance = await contract.methods
+            .getBalance()
+            .call({ from: accounts[0] });
+          const balanceInEth = web3.utils.fromWei(balance, "ether");
+          document.getElementById("balanceAmount").textContent =
+            balanceInEth + " ETH";
+        } catch (error) {
+          console.error(error);
+          alert("Failed to fetch balance: " + error.message);
+        }
+      }
+
+      // CRUD Operations
+      function addRecord() {
+        const name = document.getElementById("recordName").value;
+        const amount = document.getElementById("recordAmount").value;
+        const type = document.getElementById("recordType").value;
+
+        if (!name || !amount || !type) {
+          alert("Please fill all fields");
+          return;
+        }
+
+        const record = {
+          id: nextId++,
+          name: name,
+          amount: amount,
+          type: type,
+        };
+
+        records.push(record);
+        renderRecords();
+
+        document.getElementById("recordName").value = "";
+        document.getElementById("recordAmount").value = "";
+        document.getElementById("recordType").value = "";
+      }
+
+      function editRecord(id) {
+        const record = records.find((r) => r.id === id);
+        if (record) {
+          document.getElementById("recordName").value = record.name;
+          document.getElementById("recordAmount").value = record.amount;
+          document.getElementById("recordType").value = record.type;
+          deleteRecord(id);
+        }
+      }
+
+      function deleteRecord(id) {
+        records = records.filter((r) => r.id !== id);
+        renderRecords();
+      }
+
+      function renderRecords() {
+        const tableBody = document.getElementById("recordsTable");
+
+        if (records.length === 0) {
+          tableBody.innerHTML =
+            '<tr><td colspan="5" style="text-align: center; color: #a0a0b0;">No records yet</td></tr>';
+          return;
+        }
+
+        tableBody.innerHTML = records
+          .map(
+            (record) => `
+                <tr>
+                    <td>${record.id}</td>
+                    <td>${record.name}</td>
+                    <td>${record.amount} ETH</td>
+                    <td>${record.type}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="edit-btn" onclick="editRecord(${record.id})">Edit</button>
+                            <button class="delete-btn" onclick="deleteRecord(${record.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `
+          )
+          .join("");
+      }
+
+      // Initialize
+      window.addEventListener("load", () => {
+        initWeb3();
+      });
+    </script>
+  </body>
+</html>
